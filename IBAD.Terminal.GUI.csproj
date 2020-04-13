@@ -69,6 +69,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\MainModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -94,8 +96,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Model\" />
+    <ProjectReference Include="IBAD.Terminal.Library\IBAD.Terminal.Library.csproj">
+      <Project>{c14c04fb-7853-4d31-944c-1f03b4c1c69e}</Project>
+      <Name>IBAD.Terminal.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

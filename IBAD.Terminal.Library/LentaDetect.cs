@@ -6,11 +6,30 @@ using System.Threading.Tasks;
 
 namespace IBAD.Terminal.Library
 {
+    public class TapeDetectEventArgs
+    {
+        // Сообщение
+        public string name { get;  }
+        public double position { get;  }
+
+        public TapeDetectEventArgs(string name, double pos)
+        {
+            this.name = name;
+            this.position = pos;
+        }
+    }
     public class LentaDetect
     {
+        public delegate void TapeDetectEventHendler(object sender, TapeDetectEventArgs e);
+        public event TapeDetectEventHendler EventResolveComplete;
         public string[] TapeName { get; set; }
         public double[] TapeStart { get; set; }
         public double[] TapeEnd { get; set; }
+        public double tapeDelta { get; set; }
+        public double systemDelta { get; set; }
+        public double position { get; set; }
+        public double Lenght { get; set; }
+        public string currentTape { get; set; }
 
         double[] getInterval(double[] Start, double[] End, double DeltaTape, double Delta)
         {
@@ -31,7 +50,7 @@ namespace IBAD.Terminal.Library
 
             return Out;
         }
-        int TapeDetect(double Lenght, double[] setPoint)
+        int tapeDetect(double Lenght, double[] setPoint)
             {
             int Out=606;
             for (int i = 0; i < setPoint.Length; i++)
@@ -77,5 +96,19 @@ namespace IBAD.Terminal.Library
             if (setPoint == Name.Length+1) return "TransportEnd";
             return "Error";
         }
+        public LentaDetect(double deltaSys)
+        {
+            systemDelta = deltaSys;
+        }
+        public void ResolveParam()
+        {
+          double[] setPoins= getInterval(TapeStart, TapeEnd, tapeDelta, systemDelta);
+          int tapeNum = tapeDetect(Lenght, setPoins);
+          position = positionResolve(TapeStart, TapeEnd, Lenght, tapeNum, setPoins);
+          currentTape = getNameTape(TapeName, TapeStart, TapeEnd,tapeNum);
+          EventResolveComplete?.Invoke(this, new TapeDetectEventArgs(currentTape,position));
+        }
+
     }
+
 }
