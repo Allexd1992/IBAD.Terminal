@@ -33,14 +33,91 @@ namespace IBAD.Terminal.Library
             modbus.Port = 505;
             modbus.Listen();
             modbus.HoldingRegistersChanged += Modbus_HoldingRegistersChanged;
+            modbus.holdingRegisters.localArray[3] = 230; // process_id
          }
+        public void setCurName(string[] Name)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                WriteString(Name[i], 2000 + 100 * i, Name[i].Length);
+            }
+            
+        }
 
+        public void setCurPos(double[] start)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                WriteDouble(start[i], 2600 + i * 4);
+            }
+        }
+        public void setName(string[] Name)
+        {
+            for (int i = 0; i < Name.Length; i++)
+            {
+                WriteString(Name[i], 100 + 100 * i, Name[i].ToCharArray().Length);
+            }
+        }
+        public void setStart(double[] start)
+        {
+            for (int i = 0; i < start.Length; i++)
+            {
+                WriteDouble(start[i], 10 + i * 4);
+            }
+        }
+        public void setEnd(double[] end)
+        {
+            for (int i = 0; i < end.Length; i++)
+            {
+                WriteDouble(end[i], 50 + i * 4);
+            }
+        }
+        public void setCoil(int[] coil)
+        {
+            for (int i = 0; i < coil.Length; i++)
+            {
+                WriteDint(coil[i], 94 + i * 2);
+            }
+        }
+        public void setGetSetStat()
+        {
+            WriteBool(2, true);
+        }
+        public void resetGetSetStat()
+        {
+            WriteBool(2, false);
+        }
+        public void setFlDbase()
+        {
+            WriteBool(1, true);
+        }
+        
+        public void resetFlDbase()
+        {
+            WriteBool(1, false);
+        }
+        public void setRunNumb(int runNumb)
+        {
+            modbus.holdingRegisters.localArray[4] = (short)runNumb;    
+        }
+        public bool getFlDbase()
+        {
+            return ReadBool(1);
+        }
+        public bool getGetSetStat()
+        {
+            return ReadBool(2);
+        }
+        public bool getBaseStat()
+        {
+            return ReadBool(5);
+        }
         public string[] getName()
         {
             string[] Out = new string[10];
             for (int i = 1; i < 11; i++)
             {
-                Out[i]=ReadString(100*i, 100);
+                Out[i-1]=ReadString(100*i, 100);
             }
             return Out ;
         }
@@ -73,10 +150,14 @@ namespace IBAD.Terminal.Library
             
 
         }
+        public int getRunNumb()
+        {
+           return modbus.holdingRegisters.localArray[4] ;
+        }
         private void Modbus_HoldingRegistersChanged(int register, int numberOfRegisters)
         {
             
-            VariableChangeNotify?.Invoke(this, new ModbusServerWriteEventArgs(register, numberOfRegisters , ReadBool(1)));
+            VariableChangeNotify?.Invoke(this, new ModbusServerWriteEventArgs(register, numberOfRegisters , ReadBool(2)));
         }
 
         void WriteDouble(double input, int adr)
@@ -86,8 +167,7 @@ namespace IBAD.Terminal.Library
                 {
                     modbus.holdingRegisters.localArray[adr + i] = BitConverter.ToInt16(data, i * 2);
                 }
-        }
-        
+        }    
         void WriteString( string input, int ad, int chNum)
             {
             for (int i = 0; i < chNum; i++)
@@ -132,6 +212,11 @@ namespace IBAD.Terminal.Library
                 modbus.holdingRegisters.localArray[adr + i] = BitConverter.ToInt16(data, i * 2);
             }
         }
+        void WriteBool(int adr, bool value)
+        {
+            modbus.holdingRegisters.localArray[adr] = Convert.ToInt16(value);
+        }
+        
         int ReadInt(int adr)
         {
             short[] buff = new short[2];
@@ -210,15 +295,11 @@ namespace IBAD.Terminal.Library
             double var = BitConverter.ToDouble(buff2, 0);
 
             return var;
-        }
-        
+        }     
         bool ReadBool(int adr)
         {
             return Convert.ToBoolean(modbus.holdingRegisters.localArray[adr]);
         }
-        void WriteBool(int adr, bool value)
-        {
-            modbus.holdingRegisters.localArray[adr]=Convert.ToInt16(value);
-        }
+       
     }
 }

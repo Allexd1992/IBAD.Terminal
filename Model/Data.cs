@@ -15,9 +15,9 @@ namespace IBAD.Terminal.Model
         public double deltaTape { get; set; }
         public int Coil01 { get; set; }
         public int Coil02 { get; set; }
-        public bool F_Base_on { get;  set; }
-        public bool Get_Set_Stat { get; set; }
-        public bool AutoRun_stat { get; set; }
+        
+        public bool autoRun { get; set; }
+        public int runNumb { get; set; }
         public Data()
         {
             
