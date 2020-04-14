@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using IBAD.Terminal.Model;
+using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,12 +8,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace IBAD.Terminal.ViewModel 
 {
     class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        MainModel model;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
@@ -200,13 +203,7 @@ namespace IBAD.Terminal.ViewModel
                 return new DelegateCommand(() =>
                 {
 
-                    model.TapeName = sTapeName;
-                    model.TapeStartPos = (float)Convert.ToDouble(sTapeStartPos);
-                    model.TapeEndPos = (float)Convert.ToDouble(sTapeEndPos);
-                    model.coil01 = Convert.ToInt32(sCoil01);
-                    model.coil02 = Convert.ToInt32(sCoil02);
-                    model.delta = (float)Convert.ToDouble(sDelta);
-                    model.TapeSave();
+                    WriteSettings();
 
 
                 });
@@ -218,8 +215,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.TargetName = sTargetName;
-                    model.TargetSave();
+                    model.Save();
                 });
             }
         }
@@ -229,7 +225,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.TapeUp();
+                    model.tapeUp();
                     RefreshSet();
 
                 });
@@ -241,7 +237,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.TapeDown();
+                    model.tapeDown();
                     RefreshSet();
                 });
             }
@@ -253,7 +249,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.BaseWrRun();
+                    model.setFlBase();
                 });
             }
         }
@@ -263,7 +259,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.BaseWrStop();
+                    model.resetFlBase();
                 });
             }
         }
@@ -275,7 +271,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.AutoSettingRun();
+                    model.setAutoRun();
                 });
             }
         }
@@ -285,7 +281,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.AutoSettingStop();
+                    model.resetAutoRun();
                 });
             }
         }
@@ -295,7 +291,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.GetSet();
+                    model.setSetStat();
                 });
             }
         }
@@ -305,7 +301,7 @@ namespace IBAD.Terminal.ViewModel
             {
                 return new DelegateCommand(() =>
                 {
-                    model.ResetSet();
+                    model.resetSetStat();
                 });
             }
         }
@@ -314,28 +310,43 @@ namespace IBAD.Terminal.ViewModel
         {
             sTapeNum = model.TapeNum.ToString();
            
-            sTapeName = model.TapeName;
-            sTargetName = model.TargetName;
-
-
-            slehgth = String.Format("{0:0.0}", model.tapeLen);
-            sTapeStartPos = String.Format("{0:0.0}", model.TapeStartPos);
-            sTapeEndPos = String.Format("{0:0.0}", model.TapeEndPos);
-            sDelta = String.Format("{0:0}", model.delta);
-            sCoil01 = String.Format("{0:0}", model.coil01);
-            sCoil02 = String.Format("{0:0}", model.coil02);
+            sTapeName = model.data.Name[model.TapeNum - 1];
+            slehgth = String.Format("{0:0.0}", Math.Abs(model.data.End[model.TapeNum-1] - model.data.Start[model.TapeNum - 1]));
+            sTapeStartPos = String.Format("{0:0.0}", model.data.Start[model.TapeNum - 1]);
+            sTapeEndPos = String.Format("{0:0.0}", model.data.End[model.TapeNum - 1]);
+            sDelta = String.Format("{0:0}", model.data.deltaTape);
+            sCoil01 = String.Format("{0}", model.data.Coil01);
+            sCoil02 = String.Format("{0}", model.data.Coil02);
+        }
+        private void WriteSettings()
+        {
+            model.data.Name[model.TapeNum-1] = sTapeName;
+            model.data.Start[model.TapeNum - 1] = double.Parse(sTapeStartPos);
+            model.data.End[model.TapeNum - 1] = double.Parse(sTapeEndPos);
+            model.data.deltaTape = double.Parse(sDelta);
+            model.data.Coil01 = int.Parse(sCoil01);
+            model.data.Coil02 = int.Parse(sCoil02);
         }
         private void RefreshCV()
         {
-            sTapeNameMon = model.TapeNameMon;
-            sTargetNameMon = model.TargetNameMon;
-            sTargetDeg = String.Format("{0:0.00}", model.targetDeg);
-            sTapeCoor = String.Format("{0:0.00}", model.tapeCoord);
-            sWrDbOn = model.WbOn ? "True" : "False";
-            sWrDbOff = !model.WbOn ? "True" : "False";
-            sAutoWrOn = model.SetWbOn ? "True" : "False";
-            sAutoWrOff = !model.SetWbOn ? "True" : "False";
-            sWrDbRun = model.WbRun ? "True" : "False";
+
+            sTapeCoor01 = String.Format("{0:0.00}", model.curPos[0]);
+            sTapeCoor02 = String.Format("{0:0.00}", model.curPos[1]);
+            sTapeCoor03 = String.Format("{0:0.00}", model.curPos[2]);
+            sTapeCoor04 = String.Format("{0:0.00}", model.curPos[3]);
+            sTapeCoor05 = String.Format("{0:0.00}", model.curPos[4]);
+            sTapeCoor06 = String.Format("{0:0.00}", model.curPos[5]);
+            sTapeNameMon01 = model.curName[0];
+            sTapeNameMon02 = model.curName[1];
+            sTapeNameMon03 = model.curName[2];
+            sTapeNameMon04 = model.curName[3];
+            sTapeNameMon05 = model.curName[4];
+            sTapeNameMon06 = model.curName[5];
+            sWrDbOn =  model.flDbase? "True" : "False";
+            sWrDbOff = !model.flDbase ? "True" : "False";
+            sAutoWrOn =  model.data.autoRun? "True" : "False";
+            sAutoWrOff = !model.data.autoRun ? "True" : "False";
+            sWrDbRun =  model.dBaseStat? "True" : "False";
             sGetSetStat = model.getSetStat ? "True" : "False";
         }
         public MainViewModel()

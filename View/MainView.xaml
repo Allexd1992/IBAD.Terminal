@@ -84,7 +84,7 @@
                     <RowDefinition Height="0.8*"/>
                     <RowDefinition Height="0.5*"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="1" Template="{StaticResource btGreenTemplate}" Content="Write" Command="{Binding Write}"/>
+                <Button Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="1" Template="{StaticResource btGreenTemplate}" Content="Write" Command="{Binding  WriteTape}"/>
                 <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="1" Content="Tape Name" Style="{StaticResource Tittle_St}" FontSize="10"/>
                 <Label Grid.Row="5" Grid.Column="5"  Content="Start position" FontSize="9" Style="{StaticResource  General_St}"/>
                 <Label Grid.Row="5" Grid.Column="7"  Content="End position" FontSize="10" Style="{StaticResource  General_St}"/>
@@ -149,25 +149,25 @@
                 <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2" Content="Current status" Style="{StaticResource Tittle_St}" />
                 <Label Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3"  Content="Name" FontSize="10" Style="{StaticResource  General_St}" HorizontalAlignment="Center"/>
                 <Label Grid.Row="3" Grid.Column="7"   Content="Coordinat" FontSize="10" Style="{StaticResource  General_St}" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="5" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor}" Tag=""/>
+                <TextBox Grid.Row="5" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor01}" Tag=""/>
                 <Label Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="1" Content="Process name" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center" />
                 <Label Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Content="PM1 Al2O3 sputter-1" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon}" />
-                <TextBox Grid.Row="7" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTargetDeg}" Tag=""/>
+                <TextBox Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon01}" />
+                <TextBox Grid.Row="7" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor02}" Tag=""/>
                 <Label Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3" Content="PM2 Al2O3 sputter-2" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTargetNameMon}" />
-                <TextBox Grid.Row="9" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTargetDeg}" Tag=""/>
+                <TextBox Grid.Row="7" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon02}" />
+                <TextBox Grid.Row="9" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor03}" Tag=""/>
                 <Label Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Content="PM3 Y2O3 sputter" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTargetNameMon}" />
-                <TextBox Grid.Row="11" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTargetDeg}" Tag=""/>
+                <TextBox Grid.Row="9" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon03}" />
+                <TextBox Grid.Row="11" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor04}" Tag=""/>
                 <Label Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="3" Content="PM4 IBAD MgO" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTargetNameMon}" />
-                <TextBox Grid.Row="13" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTargetDeg}" Tag=""/>
+                <TextBox Grid.Row="11" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon04}" />
+                <TextBox Grid.Row="13" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor05}" Tag=""/>
                 <Label Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="3" Content="PM5 MgO HomoEpi" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTargetNameMon}" />
-                <TextBox Grid.Row="15" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTargetDeg}" Tag=""/>
+                <TextBox Grid.Row="13" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon05}" />
+                <TextBox Grid.Row="15" Grid.Column="7" Template="{StaticResource monValue}" Text="{Binding sTapeCoor06}" Tag=""/>
                 <Label Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="3" Content="PM6 LMO Sputter" Style="{StaticResource General_St}" FontSize="10"  HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="15" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTargetNameMon}" />
+                <TextBox Grid.Row="15" Grid.Column="3" Grid.ColumnSpan="3" Template="{StaticResource monValue}" Text="{Binding sTapeNameMon06}" />
             </Grid>
             <Grid Grid.Column="0" Grid.Row="18" Grid.ColumnSpan="5" Grid.RowSpan="3" Margin="3" Background="Black">
                 <Grid.RowDefinitions>
@@ -226,7 +226,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Style="{StaticResource Tittle_St}"  FontSize="10" Content="SAVE SETTINGS" Height="22" Margin="0,5" RenderTransformOrigin="0.923,0.568" Width="84" />
 
-                <Button Grid.Column="3" Grid.Row="1" Grid.RowSpan="1" Template="{StaticResource btRedTemplate}"   Content="Save" Command="{Binding OffAutoWB}" Margin="0,5"/>
+                <Button Grid.Column="3" Grid.Row="1" Grid.RowSpan="1" Template="{StaticResource btRedTemplate}"   Content="Save" Command="{Binding SaveTape}" Margin="0,5"/>
             </Grid>
         </Grid>
     </Grid>

@@ -21,6 +21,8 @@ namespace IBAD.Terminal.Model
         public bool dBaseStat { get; set; }
         public string[] curName { get; set; }
         public double[] curPos { get; set; }
+        public int TapeNum { get; set; }
+
 
         public Data data;
         ModbusClientTCP ClientTCP;
@@ -175,6 +177,12 @@ namespace IBAD.Terminal.Model
         public void Save()
         {
             Serialz();
+            serverTCP.setStart(data.Start);
+            serverTCP.setEnd(data.End);
+            serverTCP.setName(data.Name);
+            serverTCP.setCoil(new int[2]{ data.Coil01, data.Coil02 });
+            serverTCP.setRunNumb(data.runNumb);
+            
         }
         private void Serialz()
         {
@@ -225,6 +233,20 @@ namespace IBAD.Terminal.Model
         public void resetAutoRun()
         {
             data.autoRun = false;
+        }
+       public void tapeUp()
+       {
+        if (TapeNum<10)
+            {
+                TapeNum++;
+            }
+       }
+        public void tapeDown()
+        {
+            if (TapeNum >1 )
+            {
+                TapeNum--;
+            }
         }
 
     }
