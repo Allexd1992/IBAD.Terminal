@@ -30,32 +30,86 @@ namespace IBAD.Terminal.Library
         public bool reelRun { get; private set; }
         Timer timerMbClient;
         ModbusClient client;
-         public ModbusClientTCP()
+        private float lengthOld;
+
+        public ModbusClientTCP()
         {
-            client = new ModbusClient("10.177.3.20", 502);
+            //client = new ModbusClient();
+            //client.UnitIdentifier = 0;
+            client = new ModbusClient();
             client.UnitIdentifier = 0;
-            
-            client.ConnectedChanged += Client_ConnectedChanged;
+            client.Connect("10.177.3.20", 502);
             timerMbClient = new Timer(100);
             timerMbClient.Elapsed += TimerMbClient_Elapsed;
             timerMbClient.AutoReset = true;
             timerMbClient.Enabled = true;
             
         }
+        async void Scan2()
+        {
+            await Task.Run(() =>
+            {
+                //try
+                //{
+                //    client2 = new ModbusClient();
+                //    client2.UnitIdentifier = 0;
+                //    client2.Connect("10.177.3.20", 502);
+                //    int[] data =client2.ReadHoldingRegisters(0, 125);
+                //    foreach (var item in data)
+                //    {
+                //        Console.WriteLine(item);
+                //    }
+                  
+                //    client2.Disconnect();
+                //}
+                //catch
+                //{ }
+            });
+            
+            
+        }
         void Scan()
         {
-            client.Connect("10.177.3.20", 502);
-            lenght =MbGetFloat(179);
-            Console.WriteLine(lenght);
-           reelRun= MbGetBool(184);
+            try
+            {
+
+            
+
+                int[] data = client.ReadHoldingRegisters(0, 100);
+            Console.WriteLine(data[23]);
+            int[] data1 = client.ReadHoldingRegisters(100, 100);
+            Console.WriteLine(" Speed {0:0.00 }", ModbusClient.ConvertRegistersToFloat(new int[] { data1[80], data1[79] }));
+            Console.WriteLine(data1[23]);
+            lenght = MbGetFloat(179);
+            Console.WriteLine("{0:0.00 }", lenght);
+            reelRun = MbGetBool(184);
             Console.WriteLine(reelRun);
-            int[] data =client.ReadHoldingRegisters(0, 213);
-            client.Disconnect();
+            //int[] data = client.ReadHoldingRegisters(0, 10);
+            //Console.WriteLine(data[0]);
+            //client.Disconnect();
             ScanSuccesNotify?.Invoke(this, new ModbusClientScanCompletArgs(lenght, reelRun, data));
+            if (lenght == lengthOld && reelRun)
+            {
+                Reconnect();
+            }
+            else
+            {
+                lengthOld = lenght;
+            }
+
+            }
+            catch
+            {
+
+                Reconnect();
+            }
+
+
         }
         private void TimerMbClient_Elapsed(object sender, ElapsedEventArgs e)
         {
             Scan();
+           Scan2();
             Console.WriteLine("Scan Run");
         }
 
@@ -65,11 +119,15 @@ namespace IBAD.Terminal.Library
             {
                 client.Connect("10.177.3.20", 502);
             }
+            else
+            {
+                client.Disconnect();  
+            }
           
         }
           private void Client_ConnectedChanged(object sender)
           {
-            //Reconnect();
+            Reconnect();
          }
 
         float MbGetFloat(int adr)
@@ -77,15 +135,16 @@ namespace IBAD.Terminal.Library
             try
             {
                 int[] buf = client.ReadHoldingRegisters(adr, 2);
-                return ModbusClient.ConvertRegistersToFloat(buf,ModbusClient.RegisterOrder.HighLow);
+                return ModbusClient.ConvertRegistersToFloat(buf, ModbusClient.RegisterOrder.HighLow);
             }
             catch
             {
                 Console.WriteLine("Modbus read float error");
-                
+
                 return 999;
             }
         }
+       
         bool MbGetBool(int adr)
         {
             try

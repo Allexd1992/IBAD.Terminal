@@ -56,19 +56,20 @@ namespace IBAD.Terminal.Library
             for (int i = 0; i < setPoint.Length; i++)
             {
                 
-                    if (i!= 0 &&Lenght < setPoint[i] && Lenght > setPoint[i - 1]  )
+                    if (i!= 0 && Lenght < setPoint[i] && Lenght > setPoint[i - 1]  )
                     {
                         Out = i - 1;
                     }
                     else
                     {
                         if (Lenght < setPoint[0]) Out = -1;
-                        if (Lenght > setPoint[setPoint.Length - 1]) Out = setPoint.Length;
+                        if (i != 0 && Lenght > setPoint[setPoint.Length - 1]) Out = setPoint.Length;
                     }
                 
               
 
             }
+           // Console.WriteLine("Tape Numb"+Out);
             return Out;
             }
         double positionResolve(double[] Start, double[] End, double Lenght, int setPoin, double[] interval)

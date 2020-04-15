@@ -383,9 +383,9 @@ namespace IBAD.Terminal.ViewModel
             sTapeNameMon04 = model.curName[3];
             sTapeNameMon05 = model.curName[4];
             sTapeNameMon06 = model.curName[5];
-            sTapeNameMon04 = model.curName[6];
-            sTapeNameMon05 = model.curName[7];
-            sTapeNameMon06 = model.curName[8];
+            sTapeNameMon07 = model.curName[6];
+            sTapeNameMon08 = model.curName[7];
+            sTapeNameMon09 = model.curName[8];
             sWrDbOn =  model.flDbase? "True" : "False";
             sWrDbOff = !model.flDbase ? "True" : "False";
             sAutoWrOn =  model.data.autoRun? "True" : "False";

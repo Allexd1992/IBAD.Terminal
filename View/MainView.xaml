@@ -265,7 +265,7 @@
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource Tittle_St}"  FontSize="12" Content="SETTING SAVE"/>
-                <Button Grid.Column="3" Grid.Row="3" Template="{StaticResource btRedTemplate}"   Content="SAVE" Tag="{Binding sWrDbOff}" Command="{Binding SaveTape}"/>
+                <Button Grid.Column="3" Grid.Row="3" Template="{StaticResource btRedTemplate}"   Content="SAVE"  Command="{Binding SaveTape}"/>
             </Grid>
         </Grid>
     </Grid>

@@ -175,29 +175,27 @@ namespace IBAD.Terminal.Model
       
         private void ClientTCP_ScanSuccesNotify(object sender, ModbusClientScanCompletArgs e)
         {
-            Console.WriteLine(e.len);
+            Console.WriteLine("{0:0.00}",e.len);
             Length=e.len;
             reelOn = e.reelOn;
             Autorun();
-            if (e.reelOn)
-            {
+            
                 foreach (var item in Detects)
                 {
                     item.Lenght = e.len;
                     
                     item.ResolveParam();
                 }
-            }
-
+          
 
         }
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             
-            for (int i = 0; i < curName.Length; i++)
-            {
-                Console.WriteLine(curName[i]);
-            }
+            //for (int i = 0; i < curName.Length; i++)
+            //{
+            //    Console.WriteLine(curName[i]);
+            //}
             
             if (curName[0] != null && curName[1] != null && curName[2] != null && curName[3] != null && curName[4] != null && curName[5] != null && curName[6] != null && curName[7] != null && curName[8] != null)
 
