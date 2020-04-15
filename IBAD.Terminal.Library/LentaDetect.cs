@@ -55,15 +55,18 @@ namespace IBAD.Terminal.Library
             int Out=606;
             for (int i = 0; i < setPoint.Length; i++)
             {
-                if  (Lenght<setPoint[i] && Lenght > setPoint[i-1] && i!=0)
-                {
-                    Out= i-1;
-                }
-                else
-                {
-                    if (Lenght < setPoint[0]) Out = -1;
-                    if (Lenght > setPoint[setPoint.Length-1]) Out = setPoint.Length;
-                }
+                
+                    if (i!= 0 &&Lenght < setPoint[i] && Lenght > setPoint[i - 1]  )
+                    {
+                        Out = i - 1;
+                    }
+                    else
+                    {
+                        if (Lenght < setPoint[0]) Out = -1;
+                        if (Lenght > setPoint[setPoint.Length - 1]) Out = setPoint.Length;
+                    }
+                
+              
 
             }
             return Out;
@@ -83,7 +86,7 @@ namespace IBAD.Terminal.Library
                 return (Lenght - interval[setPoin]) * sign + Start[setPoin];
             }
             if (setPoin == -1) return Lenght;
-            if (setPoin == Start.Length + 1) return Lenght - interval[setPoin];
+            if (setPoin == Start.Length + 1) return Lenght - interval[setPoin-1];
             else return 0;
         }
         string getNameTape(string[] Name, double[] Start, double[] End, int setPoint)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace IBAD.Terminal.Model
 {
     [Serializable]
-    class Data
+    public class Data
     {
         public  double[] Start { get; set; }
         public double[] End { get; set; }
@@ -24,6 +24,13 @@ namespace IBAD.Terminal.Model
             Start = new double[10];
             End = new double[10];
             Name = new string[10];
+            for (int i = 0; i <10 ; i++)
+            
+            {
+                Name[i] = "Tape0"+(i+1);
+                Start[i] =  i+1;
+                End[i] = i+2;
+            }
             
         }
     }

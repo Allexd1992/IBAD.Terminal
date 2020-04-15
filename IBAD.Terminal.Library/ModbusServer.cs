@@ -35,11 +35,12 @@ namespace IBAD.Terminal.Library
             modbus.HoldingRegistersChanged += Modbus_HoldingRegistersChanged;
             modbus.holdingRegisters.localArray[3] = 230; // process_id
          }
-        public void setCurName(string[] Name)
+        public void setCurName(string[] Name1)
         {
+            
             for (int i = 0; i < 6; i++)
             {
-                WriteString(Name[i], 2000 + 100 * i, Name[i].Length);
+                WriteString(Name1[i], 2000 + 100 * i, Name1[i].Length);
             }
             
         }
@@ -55,7 +56,7 @@ namespace IBAD.Terminal.Library
         {
             for (int i = 0; i < Name.Length; i++)
             {
-                WriteString(Name[i], 100 + 100 * i, Name[i].ToCharArray().Length);
+                WriteString2(Name[i], 100 + 100 * i, Name[i].Length);
             }
         }
         public void setStart(double[] start)
@@ -135,7 +136,7 @@ namespace IBAD.Terminal.Library
             double[] Out = new double[10];
             for (int i = 0; i < 10; i++)
             {
-                Out[i] = ReadDouble(50+ 2 * i);
+                Out[i] = ReadDouble(50+ 4 * i);
             }
             return Out;
         }
@@ -206,10 +207,15 @@ namespace IBAD.Terminal.Library
         }
         void WriteDint(int input, int adr)
         {
-            byte[] data = BitConverter.GetBytes(input);
-            for (int i = 0; i < 4; i++)
+            int[] var = ModbusClient.ConvertLongToRegisters(input);
+            //byte[] data = BitConverter.GetBytes(input);
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    modbus.holdingRegisters.localArray[adr + i] = BitConverter.ToInt16(data, 0 +i* 2-1);
+            //}
+            for (int i = 0; i < var.Length; i++)
             {
-                modbus.holdingRegisters.localArray[adr + i] = BitConverter.ToInt16(data, i * 2);
+                modbus.holdingRegisters.localArray[adr + i] = (short)var[i];
             }
         }
         void WriteBool(int adr, bool value)
@@ -252,8 +258,8 @@ namespace IBAD.Terminal.Library
             {
 
                 buffs = BitConverter.GetBytes((int)buff[i]);
-                buffful[i * 2] = (char)buffs[1];
-                buffful[i * 2 + 1] = (char)buffs[0];
+                buffful[i * 2] = (char)buffs[0];
+                buffful[i * 2 + 1] = (char)buffs[1];
 
             }
             string str = new string(buffful);

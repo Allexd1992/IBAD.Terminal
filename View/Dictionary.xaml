@@ -129,6 +129,21 @@
             </ContentControl>
         </Border>
     </ControlTemplate>
+    <ControlTemplate TargetType="TextBox" x:Key="monValue2">
+        <Border Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" Background="Gray" CornerRadius="2" x:Name="monValBorder" >
+            <ContentControl>
+                <Grid  >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  Grid.Column="0" Grid.ColumnSpan="3" Text="{TemplateBinding Text}" Style="{StaticResource  btLabel}" Background="Transparent" HorizontalAlignment="Center"  VerticalAlignment="Center" FontSize="12"  Foreground="White" TextAlignment="Center"/>
+                    
+                </Grid>
+            </ContentControl>
+        </Border>
+    </ControlTemplate>
     <ControlTemplate TargetType="Button" x:Key="btGreenTemplate">
         <Border Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" x:Name="Buffon" Background="#FF9C8446" CornerRadius="5">
             <ContentControl  Content="{TemplateBinding Content}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontFamily="Gotham Pro" FontSize="{TemplateBinding FontSize}"/>

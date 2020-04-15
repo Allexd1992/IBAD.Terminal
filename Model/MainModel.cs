@@ -30,6 +30,7 @@ namespace IBAD.Terminal.Model
         List<LentaDetect> Detects;
         public MainModel()
         {
+            TapeNum = 1;
             try
             {
                 XmlSerializer formatter = new XmlSerializer(typeof(Data));
@@ -53,15 +54,9 @@ namespace IBAD.Terminal.Model
              };
             curPos = new double[6];
             curName = new string[6];
-            foreach (var item in Detects)
-            {
-                item.TapeName = data.Name;
-                item.TapeStart = data.Start;
-                item.TapeEnd = data.End;
-                item.tapeDelta = data.deltaTape;
-                
-            }
-            
+            WriteSettingsToBlock();
+
+
             ClientTCP = new ModbusClientTCP();
             ClientTCP.ScanSuccesNotify += ClientTCP_ScanSuccesNotify;
             serverTCP = new ModbusServerTCP();
@@ -73,13 +68,23 @@ namespace IBAD.Terminal.Model
             Detects[0].EventResolveComplete += MainModel_EventResolveCompleteTm01;
             Detects[1].EventResolveComplete += MainModel_EventResolveCompleteTm02;
             Detects[2].EventResolveComplete += MainModel_EventResolveCompleteTm03;
-            Detects[4].EventResolveComplete += MainModel_EventResolveCompleteTm04;
-            Detects[5].EventResolveComplete += MainModel_EventResolveCompleteTm05;
-            Detects[6].EventResolveComplete += MainModel_EventResolveCompleteTm06;
+            Detects[3].EventResolveComplete += MainModel_EventResolveCompleteTm04;
+            Detects[4].EventResolveComplete += MainModel_EventResolveCompleteTm05;
+            Detects[5].EventResolveComplete += MainModel_EventResolveCompleteTm06;
 
 
         }
+        void WriteSettingsToBlock()
+        {
+            foreach (var item in Detects)
+            {
+                item.TapeName = data.Name;
+                item.TapeStart = data.Start;
+                item.TapeEnd = data.End;
+                item.tapeDelta = data.deltaTape;
 
+            }
+        }
         private void MainModel_EventResolveCompleteTm01(object sender, TapeDetectEventArgs e)
         {
             curName[0] = e.name;
@@ -125,6 +130,10 @@ namespace IBAD.Terminal.Model
                 data.Name= serverTCP.getName();
                 data.Coil01 = serverTCP.getCoil()[0];
                 data.Coil02 = serverTCP.getCoil()[1];
+                if (!reelOn)
+                {
+                 WriteSettingsToBlock();
+                }
                 getSetStat = false;
                 Serialz();
             }
@@ -132,6 +141,7 @@ namespace IBAD.Terminal.Model
       
         private void ClientTCP_ScanSuccesNotify(object sender, ModbusClientScanCompletArgs e)
         {
+            Console.WriteLine(e.len);
             Length=e.len;
             reelOn = e.reelOn;
             Autorun();
@@ -149,9 +159,19 @@ namespace IBAD.Terminal.Model
         }
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            dBaseStat = serverTCP.getBaseStat();
-            serverTCP.setCurPos(curPos);
-            serverTCP.setCurName(curName);
+            
+            for (int i = 0; i < curName.Length; i++)
+            {
+                Console.WriteLine(curName[i]);
+            }
+            
+            if (curName[0] != null && curName[1] != null && curName[2] != null && curName[3] != null && curName[4] != null && curName[5] != null)
+
+            {
+                dBaseStat = serverTCP.getBaseStat();
+                serverTCP.setCurPos(curPos);
+                serverTCP.setCurName(curName);
+            }
 
         }
         private void Autorun()

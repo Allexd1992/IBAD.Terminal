@@ -32,7 +32,7 @@ namespace IBAD.Terminal.Library
         {
             client = new ModbusClient("10.177.3.20", 502);
             client.UnitIdentifier = 0;
-            client.Connect();
+            
             client.ConnectedChanged += Client_ConnectedChanged;
             timerMbClient = new Timer(100);
             timerMbClient.Elapsed += TimerMbClient_Elapsed;
@@ -42,13 +42,18 @@ namespace IBAD.Terminal.Library
         }
         void Scan()
         {
-           lenght=MbGetFloat(179);
+            client.Connect("10.177.3.20", 502);
+            lenght =MbGetFloat(179);
+            Console.WriteLine(lenght);
            reelRun= MbGetBool(184);
-           ScanSuccesNotify?.Invoke(this, new ModbusClientScanCompletArgs(lenght, reelRun));
+            Console.WriteLine(reelRun);
+            client.Disconnect();
+            ScanSuccesNotify?.Invoke(this, new ModbusClientScanCompletArgs(lenght, reelRun));
         }
         private void TimerMbClient_Elapsed(object sender, ElapsedEventArgs e)
         {
             Scan();
+            Console.WriteLine("Scan Run");
         }
 
         void Reconnect()
@@ -61,15 +66,15 @@ namespace IBAD.Terminal.Library
         }
           private void Client_ConnectedChanged(object sender)
           {
-            Reconnect();
+            //Reconnect();
          }
 
         float MbGetFloat(int adr)
         {
             try
             {
-                int[] buf = client.ReadHoldingRegisters(adr-1, 2);
-                return ModbusClient.ConvertRegistersToFloat(buf);
+                int[] buf = client.ReadHoldingRegisters(adr, 2);
+                return ModbusClient.ConvertRegistersToFloat(buf,ModbusClient.RegisterOrder.HighLow);
             }
             catch
             {
