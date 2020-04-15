@@ -117,6 +117,24 @@ namespace IBAD.Terminal.ViewModel
             set { if (tapeNameMon06!= value) { tapeNameMon06 = value; OnPropertyChanged(); GC.Collect(); } }
         }
 
+        private string tapeNameMon07;
+        public string sTapeNameMon07
+        {
+            get { return tapeNameMon07; }
+            set { if (tapeNameMon07 != value) { tapeNameMon07 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
+        private string tapeNameMon08;
+        public string sTapeNameMon08
+        {
+            get { return tapeNameMon08; }
+            set { if (tapeNameMon08 != value) { tapeNameMon08 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
+        private string tapeNameMon09;
+        public string sTapeNameMon09
+        {
+            get { return tapeNameMon09; }
+            set { if (tapeNameMon09 != value) { tapeNameMon09 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
         private string tapeCoor01;
         public string sTapeCoor01
         {
@@ -154,6 +172,26 @@ namespace IBAD.Terminal.ViewModel
             set { if (tapeCoor06 != value) { tapeCoor06 = value; OnPropertyChanged(); GC.Collect(); } }
         }
 
+        private string tapeCoor07;
+        public string sTapeCoor07
+        {
+            get { return tapeCoor07; }
+            set { if (tapeCoor07 != value) { tapeCoor07 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
+
+        private string tapeCoor08;
+        public string sTapeCoor08
+        {
+            get { return tapeCoor08; }
+            set { if (tapeCoor08 != value) { tapeCoor08 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
+
+        private string tapeCoor09;
+        public string sTapeCoor09
+        {
+            get { return tapeCoor09; }
+            set { if (tapeCoor09 != value) { tapeCoor09 = value; OnPropertyChanged(); GC.Collect(); } }
+        }
 
         private string wrDbOn;
         public string sWrDbOn
@@ -336,12 +374,18 @@ namespace IBAD.Terminal.ViewModel
             sTapeCoor04 = String.Format("{0:0.00}", model.curPos[3]);
             sTapeCoor05 = String.Format("{0:0.00}", model.curPos[4]);
             sTapeCoor06 = String.Format("{0:0.00}", model.curPos[5]);
+            sTapeCoor07= String.Format("{0:0.00}", model.curPos[6]);
+            sTapeCoor08= String.Format("{0:0.00}", model.curPos[7]);
+            sTapeCoor09= String.Format("{0:0.00}", model.curPos[8]);
             sTapeNameMon01 = model.curName[0];
             sTapeNameMon02 = model.curName[1];
             sTapeNameMon03 = model.curName[2];
             sTapeNameMon04 = model.curName[3];
             sTapeNameMon05 = model.curName[4];
             sTapeNameMon06 = model.curName[5];
+            sTapeNameMon04 = model.curName[6];
+            sTapeNameMon05 = model.curName[7];
+            sTapeNameMon06 = model.curName[8];
             sWrDbOn =  model.flDbase? "True" : "False";
             sWrDbOff = !model.flDbase ? "True" : "False";
             sAutoWrOn =  model.data.autoRun? "True" : "False";

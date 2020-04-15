@@ -33,12 +33,21 @@ namespace IBAD.Terminal.Library
             modbus.Port = 505;
             modbus.Listen();
             modbus.HoldingRegistersChanged += Modbus_HoldingRegistersChanged;
-            modbus.holdingRegisters.localArray[3] = 230; // process_id
-         }
+            modbus.holdingRegisters.localArray[3] = 610; // process_id
+            modbus.holdingRegisters.localArray[1100] = 6101;
+            modbus.holdingRegisters.localArray[1101] = 6102;
+            modbus.holdingRegisters.localArray[1102] = 6103;
+            modbus.holdingRegisters.localArray[1103] = 6104;
+            modbus.holdingRegisters.localArray[1104] = 6105;
+            modbus.holdingRegisters.localArray[1105] = 6106;
+            modbus.holdingRegisters.localArray[1106] = 6107;
+            modbus.holdingRegisters.localArray[1107] = 6108;
+            modbus.holdingRegisters.localArray[1108] = 6109;
+        }
         public void setCurName(string[] Name1)
         {
             
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 9; i++)
             {
                 WriteString(Name1[i], 2000 + 100 * i, Name1[i].Length);
             }
@@ -47,9 +56,9 @@ namespace IBAD.Terminal.Library
 
         public void setCurPos(double[] start)
         {
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 9; i++)
             {
-                WriteDouble(start[i], 2600 + i * 4);
+                WriteDouble(start[i], 3000 + i * 4);
             }
         }
         public void setName(string[] Name)

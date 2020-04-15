@@ -13,11 +13,13 @@ namespace IBAD.Terminal.Library
         // Сообщение
         public float len { get; }
         public bool reelOn { get; }
+        public int[] data { get; }
 
-        public ModbusClientScanCompletArgs(float len, bool reelOn)
+        public ModbusClientScanCompletArgs(float len, bool reelOn, int[] data)
         {
             this.reelOn = reelOn;
             this.len = len;
+            this.data = data;
         }
     }
          public class ModbusClientTCP
@@ -47,8 +49,9 @@ namespace IBAD.Terminal.Library
             Console.WriteLine(lenght);
            reelRun= MbGetBool(184);
             Console.WriteLine(reelRun);
+            int[] data =client.ReadHoldingRegisters(0, 213);
             client.Disconnect();
-            ScanSuccesNotify?.Invoke(this, new ModbusClientScanCompletArgs(lenght, reelRun));
+            ScanSuccesNotify?.Invoke(this, new ModbusClientScanCompletArgs(lenght, reelRun, data));
         }
         private void TimerMbClient_Elapsed(object sender, ElapsedEventArgs e)
         {

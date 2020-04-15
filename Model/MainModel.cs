@@ -45,15 +45,18 @@ namespace IBAD.Terminal.Model
 
             Detects = new List<LentaDetect>()
             {
-            new LentaDetect(3.0),
-            new LentaDetect(45.2),
-            new LentaDetect(54.5),
-            new LentaDetect(63.05),
-            new LentaDetect(64.2),
-            new LentaDetect(85.6),
+            new LentaDetect(2.0),
+            new LentaDetect(13.3),
+            new LentaDetect(34.4),
+            new LentaDetect(45.6),
+            new LentaDetect(58.7),
+            new LentaDetect(63.5),
+            new LentaDetect(74.7),
+            new LentaDetect(97.2),
+            new LentaDetect(109.6),
              };
-            curPos = new double[6];
-            curName = new string[6];
+            curPos = new double[9];
+            curName = new string[9];
             WriteSettingsToBlock();
 
 
@@ -61,6 +64,7 @@ namespace IBAD.Terminal.Model
             ClientTCP.ScanSuccesNotify += ClientTCP_ScanSuccesNotify;
             serverTCP = new ModbusServerTCP();
             serverTCP.VariableChangeNotify += ServerTCP_VariableChangeNotify;
+            WriteSettingsToMbServer();
             timer = new Timer(100);
             timer.Elapsed += Timer_Elapsed;
             timer.AutoReset = true;
@@ -71,10 +75,21 @@ namespace IBAD.Terminal.Model
             Detects[3].EventResolveComplete += MainModel_EventResolveCompleteTm04;
             Detects[4].EventResolveComplete += MainModel_EventResolveCompleteTm05;
             Detects[5].EventResolveComplete += MainModel_EventResolveCompleteTm06;
+            Detects[6].EventResolveComplete += MainModel_EventResolveCompleteTm07;
+            Detects[7].EventResolveComplete += MainModel_EventResolveCompleteTm08;
+            Detects[8].EventResolveComplete += MainModel_EventResolveCompleteTm09;
 
 
         }
-        void WriteSettingsToBlock()
+        void WriteSettingsToMbServer()
+        {
+            serverTCP.setStart(data.Start);
+            serverTCP.setEnd(data.End);
+            serverTCP.setName(data.Name);
+            serverTCP.setCoil(new int[2] { data.Coil01, data.Coil02 });
+            serverTCP.setRunNumb(data.runNumb);
+        }
+            void WriteSettingsToBlock()
         {
             foreach (var item in Detects)
             {
@@ -121,6 +136,25 @@ namespace IBAD.Terminal.Model
             curPos[5] = e.position;
 
         }
+        private void MainModel_EventResolveCompleteTm07(object sender, TapeDetectEventArgs e)
+        {
+            curName[6] = e.name;
+            curPos[6] = e.position;
+
+        }
+        private void MainModel_EventResolveCompleteTm08(object sender, TapeDetectEventArgs e)
+        {
+            curName[7] = e.name;
+            curPos[7] = e.position;
+
+        }
+        private void MainModel_EventResolveCompleteTm09(object sender, TapeDetectEventArgs e)
+        {
+            curName[8] = e.name;
+            curPos[8] = e.position;
+
+        }
+
         private void ServerTCP_VariableChangeNotify(object sender, ModbusServerWriteEventArgs e)
         {
             if (!e.getStatus && getSetStat)
@@ -165,7 +199,7 @@ namespace IBAD.Terminal.Model
                 Console.WriteLine(curName[i]);
             }
             
-            if (curName[0] != null && curName[1] != null && curName[2] != null && curName[3] != null && curName[4] != null && curName[5] != null)
+            if (curName[0] != null && curName[1] != null && curName[2] != null && curName[3] != null && curName[4] != null && curName[5] != null && curName[6] != null && curName[7] != null && curName[8] != null)
 
             {
                 dBaseStat = serverTCP.getBaseStat();
@@ -197,11 +231,8 @@ namespace IBAD.Terminal.Model
         public void Save()
         {
             Serialz();
-            serverTCP.setStart(data.Start);
-            serverTCP.setEnd(data.End);
-            serverTCP.setName(data.Name);
-            serverTCP.setCoil(new int[2]{ data.Coil01, data.Coil02 });
-            serverTCP.setRunNumb(data.runNumb);
+            WriteSettingsToMbServer();
+            WriteSettingsToBlock();
             
         }
         private void Serialz()
