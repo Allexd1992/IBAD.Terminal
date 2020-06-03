@@ -359,9 +359,9 @@ namespace IBAD.Terminal.ViewModel
         private void WriteSettings()
         {
             model.data.Name[model.TapeNum-1] = sTapeName;
-            model.data.Start[model.TapeNum - 1] = double.Parse(sTapeStartPos);
-            model.data.End[model.TapeNum - 1] = double.Parse(sTapeEndPos);
-            model.data.deltaTape = double.Parse(sDelta);
+            model.data.Start[model.TapeNum - 1] = double.Parse(sTapeStartPos.Replace('.',','));
+            model.data.End[model.TapeNum - 1] = double.Parse(sTapeEndPos.Replace('.', ','));
+            model.data.deltaTape = double.Parse(sDelta.Replace('.', ','));
             model.data.Coil01 = int.Parse(sCoil01);
             model.data.Coil02 = int.Parse(sCoil02);
         }

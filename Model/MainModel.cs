@@ -15,6 +15,7 @@ namespace IBAD.Terminal.Model
     {
         Timer timer;
         double Length { get; set; }
+        double LengthOld { get; set; }
         bool reelOn { get; set; }
         public bool getSetStat {get; set;}
         public bool flDbase { get; set; }
@@ -159,6 +160,7 @@ namespace IBAD.Terminal.Model
         {
             if (!e.getStatus && getSetStat)
             {
+               
                 data.Start=serverTCP.getStart();
                 data.End= serverTCP.getEnd();
                 data.Name= serverTCP.getName();
@@ -174,10 +176,16 @@ namespace IBAD.Terminal.Model
         }
       
         private void ClientTCP_ScanSuccesNotify(object sender, ModbusClientScanCompletArgs e)
-        {
+        { 
+          
             Console.WriteLine("{0:0.00}",e.len);
             Length=e.len;
             reelOn = e.reelOn;
+            if (Length == 0 && LengthOld > 0)
+            {
+                Length = LengthOld;
+            }
+            
             Autorun();
             
                 foreach (var item in Detects)
@@ -186,7 +194,7 @@ namespace IBAD.Terminal.Model
                     
                     item.ResolveParam();
                 }
-          
+            LengthOld = Length;
 
         }
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -224,6 +232,7 @@ namespace IBAD.Terminal.Model
             {
                 serverTCP.resetFlDbase();
                 flDbase = false;
+                LengthOld = 0;
             }
          }
         public void Save()

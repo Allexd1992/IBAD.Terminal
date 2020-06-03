@@ -49,7 +49,7 @@ namespace IBAD.Terminal.Library
             
             for (int i = 0; i < 9; i++)
             {
-                WriteString(Name1[i], 2000 + 100 * i, Name1[i].Length);
+                WriteString2(Name1[i], 2000 + 100 * i, Name1[i].Length);
             }
             
         }

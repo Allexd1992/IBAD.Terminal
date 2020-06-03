@@ -94,10 +94,10 @@ namespace IBAD.Terminal.Library
         {
             if (setPoint != -1 && setPoint != 11 && setPoint != 606 && Start[setPoint] != End[setPoint])
             {
-                return "#" + Name[setPoint] + "_" + string.Format("{0:0.00}", Start[setPoint]) + "-" + string.Format("{0:0.00}", End[setPoint]);
+                return ("#" + Name[setPoint] + "_" + string.Format("{0}", Start[setPoint]) + "-" + string.Format("{0}", End[setPoint])).Replace(',','.');
             }
-            if (setPoint == -1) return "TransportStart";
-            if (setPoint == Name.Length+1) return "TransportEnd";
+            if (setPoint == -1) return "Transport";
+            if (setPoint == Name.Length+1) return "Transport";
             return "Error";
         }
         public LentaDetect(double deltaSys)
