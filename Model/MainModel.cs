@@ -89,6 +89,14 @@ namespace IBAD.Terminal.Model
             serverTCP.setName(data.Name);
             serverTCP.setCoil(new int[2] { data.Coil01, data.Coil02 });
             serverTCP.setRunNumb(data.runNumb);
+            if (data.MgOstat==1)
+            {
+                serverTCP.MgoSet();
+            }
+            else
+            {
+                serverTCP.MgoReset();
+            }
         }
             void WriteSettingsToBlock()
         {
@@ -305,6 +313,16 @@ namespace IBAD.Terminal.Model
             {
                 TapeNum--;
             }
+        }
+        public void MgOSet()
+        {
+            data.MgOstat = 1;
+            serverTCP.MgoSet();
+        }
+        public void MgOReset()
+        {
+            data.MgOstat = 0;
+            serverTCP.MgoReset();
         }
 
     }

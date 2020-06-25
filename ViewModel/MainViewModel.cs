@@ -232,6 +232,18 @@ namespace IBAD.Terminal.ViewModel
             get { return GetSetStat; }
             set { if (GetSetStat != value) { GetSetStat = value; OnPropertyChanged(); GC.Collect(); } }
         }
+        private string MgOStat;
+        public string sMgOStat
+        {
+            get { return MgOStat; }
+            set { if (MgOStat != value) { MgOStat = value; OnPropertyChanged(); GC.Collect(); } }
+        }
+        private string LMOStat;
+        public string sLMOStat
+        {
+            get { return LMOStat; }
+            set { if (LMOStat != value) { LMOStat = value; OnPropertyChanged(); GC.Collect(); } }
+        }
         #endregion
         #region Buttons
         public ICommand WriteTape
@@ -343,12 +355,38 @@ namespace IBAD.Terminal.ViewModel
                 });
             }
         }
+        public ICommand ISetLMO
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    sMgOStat = "False";
+                    sLMOStat = "True";
+                    model.MgOReset();
+                });
+            }
+        }
+        public ICommand ISetMgO
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    sMgOStat = "True";
+                    sLMOStat = "False";
+                    model.MgOSet();
+                });
+            }
+        }
         #endregion
         private void RefreshSet()
         {
             sTapeNum = model.TapeNum.ToString();
            
             sTapeName = model.data.Name[model.TapeNum - 1];
+          
+            
             slehgth = String.Format("{0:0.0}", Math.Abs(model.data.End[model.TapeNum-1] - model.data.Start[model.TapeNum - 1]));
             sTapeStartPos = String.Format("{0:0.0}", model.data.Start[model.TapeNum - 1]);
             sTapeEndPos = String.Format("{0:0.0}", model.data.End[model.TapeNum - 1]);
@@ -392,10 +430,21 @@ namespace IBAD.Terminal.ViewModel
             sAutoWrOff = !model.data.autoRun ? "True" : "False";
             sWrDbRun =  model.dBaseStat? "True" : "False";
             sGetSetStat = model.getSetStat ? "True" : "False";
+            if (model.data.MgOstat == 1)
+            {
+                sMgOStat = "True";
+                sLMOStat = "False";
+            }
+            else
+            {
+                sMgOStat = "False";
+                sLMOStat = "True";
+            }
         }
         public MainViewModel()
         {
             model = new MainModel();
+          
             RefreshSet();
             var timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
@@ -406,7 +455,7 @@ namespace IBAD.Terminal.ViewModel
         private void timer_Tick(object sender, EventArgs e)
         {
             RefreshCV();
-
+            Console.WriteLine("Mgo Stat " + sMgOStat);
         }
     }
 

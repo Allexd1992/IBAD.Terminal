@@ -15,12 +15,12 @@ namespace IBAD.Terminal.Model
         public double deltaTape { get; set; }
         public int Coil01 { get; set; }
         public int Coil02 { get; set; }
-        
+        public int MgOstat { get; set; }
         public bool autoRun { get; set; }
         public int runNumb { get; set; }
         public Data()
         {
-            
+    
             Start = new double[10];
             End = new double[10];
             Name = new string[10];
@@ -28,7 +28,7 @@ namespace IBAD.Terminal.Model
             
             {
                 Name[i] = "Tape0"+(i+1);
-                Start[i] =  i+1;
+                Start[i] = i+1;
                 End[i] = i+2;
             }
             

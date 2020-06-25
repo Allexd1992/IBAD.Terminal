@@ -315,6 +315,13 @@ namespace IBAD.Terminal.Library
         {
             return Convert.ToBoolean(modbus.holdingRegisters.localArray[adr]);
         }
-       
+        public void MgoSet()
+        {
+            modbus.holdingRegisters[4000] = 1;
+        }
+        public void MgoReset()
+        {
+            modbus.holdingRegisters[4000] = 0;
+        }
     }
 }
