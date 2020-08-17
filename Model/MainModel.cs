@@ -17,7 +17,7 @@ namespace IBAD.Terminal.Model
         double Length { get; set; }
         double LengthOld { get; set; }
         bool reelOn { get; set; }
-        public bool getSetStat {get; set;}
+        public bool getSetStat { get; set; }
         public bool flDbase { get; set; }
         public bool dBaseStat { get; set; }
         public string[] curName { get; set; }
@@ -89,7 +89,7 @@ namespace IBAD.Terminal.Model
             serverTCP.setName(data.Name);
             serverTCP.setCoil(new int[2] { data.Coil01, data.Coil02 });
             serverTCP.setRunNumb(data.runNumb);
-            if (data.MgOstat==1)
+            if (data.MgOstat == 1)
             {
                 serverTCP.MgoSet();
             }
@@ -98,7 +98,7 @@ namespace IBAD.Terminal.Model
                 serverTCP.MgoReset();
             }
         }
-            void WriteSettingsToBlock()
+        void WriteSettingsToBlock()
         {
             foreach (var item in Detects)
             {
@@ -113,7 +113,7 @@ namespace IBAD.Terminal.Model
         {
             curName[0] = e.name;
             curPos[0] = e.position;
-            
+
         }
         private void MainModel_EventResolveCompleteTm02(object sender, TapeDetectEventArgs e)
         {
@@ -168,51 +168,51 @@ namespace IBAD.Terminal.Model
         {
             if (!e.getStatus && getSetStat)
             {
-               
-                data.Start=serverTCP.getStart();
-                data.End= serverTCP.getEnd();
-                data.Name= serverTCP.getName();
+
+                data.Start = serverTCP.getStart();
+                data.End = serverTCP.getEnd();
+                data.Name = serverTCP.getName();
                 data.Coil01 = serverTCP.getCoil()[0];
                 data.Coil02 = serverTCP.getCoil()[1];
                 if (!reelOn)
                 {
-                 WriteSettingsToBlock();
+                    WriteSettingsToBlock();
                 }
                 getSetStat = false;
                 Serialz();
             }
         }
-      
+
         private void ClientTCP_ScanSuccesNotify(object sender, ModbusClientScanCompletArgs e)
-        { 
-          
-            Console.WriteLine("{0:0.00}",e.len);
-            Length=e.len;
+        {
+
+            Console.WriteLine("{0:0.00}", e.len);
+            Length = e.len;
             reelOn = e.reelOn;
             if (Length == 0 && LengthOld > 0)
             {
                 Length = LengthOld;
             }
-            
+
             Autorun();
-            
-                foreach (var item in Detects)
-                {
-                    item.Lenght = e.len;
-                    
-                    item.ResolveParam();
-                }
+
+            foreach (var item in Detects)
+            {
+                item.Lenght = e.len;
+
+                item.ResolveParam();
+            }
             LengthOld = Length;
 
         }
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            
+
             //for (int i = 0; i < curName.Length; i++)
             //{
             //    Console.WriteLine(curName[i]);
             //}
-            
+
             if (curName[0] != null && curName[1] != null && curName[2] != null && curName[3] != null && curName[4] != null && curName[5] != null && curName[6] != null && curName[7] != null && curName[8] != null)
 
             {
@@ -242,21 +242,21 @@ namespace IBAD.Terminal.Model
                 flDbase = false;
                 LengthOld = 0;
             }
-         }
+        }
         public void Save()
         {
             Serialz();
             WriteSettingsToMbServer();
             WriteSettingsToBlock();
-            
+
         }
         private void Serialz()
         {
             XmlSerializer formatter = new XmlSerializer(typeof(Data));
             // получаем поток, куда будем записывать сериализованный объект
             if (File.Exists("Data.xml"))
-            { 
-            File.Delete("Data.xml"); 
+            {
+                File.Delete("Data.xml");
             }
             using (FileStream fs = new FileStream("Data.xml", FileMode.OpenOrCreate))
             {
@@ -277,8 +277,8 @@ namespace IBAD.Terminal.Model
         }
         public void setFlBase()
         {
-            
-            if (Length < 0.5 && Length > 0 && reelOn && !serverTCP.getFlDbase() )
+
+            if (Length < 0.5 && Length > 0 && reelOn && !serverTCP.getFlDbase())
             {
                 data.runNumb++;
                 serverTCP.setRunNumb(data.runNumb);
@@ -294,22 +294,22 @@ namespace IBAD.Terminal.Model
         }
         public void setAutoRun()
         {
-           data.autoRun = true;   
+            data.autoRun = true;
         }
         public void resetAutoRun()
         {
             data.autoRun = false;
         }
-       public void tapeUp()
-       {
-        if (TapeNum<10)
+        public void tapeUp()
+        {
+            if (TapeNum < 10)
             {
                 TapeNum++;
             }
-       }
+        }
         public void tapeDown()
         {
-            if (TapeNum >1 )
+            if (TapeNum > 1)
             {
                 TapeNum--;
             }
@@ -323,6 +323,18 @@ namespace IBAD.Terminal.Model
         {
             data.MgOstat = 0;
             serverTCP.MgoReset();
+        }
+        public void clearTape()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                data.Name[i] = "";
+                data.Start[i] = 0;
+                data.End[i] = 0;
+            }
+            Serialz();
+            WriteSettingsToMbServer();
+            WriteSettingsToBlock();
         }
 
     }

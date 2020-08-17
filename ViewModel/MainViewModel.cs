@@ -246,6 +246,22 @@ namespace IBAD.Terminal.ViewModel
         }
         #endregion
         #region Buttons
+        public ICommand IClearTape
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+
+                    model.clearTape();
+                    sTapeName = "";
+                    sTapeStartPos = "0";
+                    sTapeEndPos = "0";
+
+
+                });
+            }
+        }
         public ICommand WriteTape
         {
             get
