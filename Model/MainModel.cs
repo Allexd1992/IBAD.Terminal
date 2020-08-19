@@ -29,6 +29,8 @@ namespace IBAD.Terminal.Model
         ModbusClientTCP ClientTCP;
         ModbusServerTCP serverTCP;
         List<LentaDetect> Detects;
+        private bool _runPlus;
+
         public MainModel()
         {
             TapeNum = 1;
@@ -228,12 +230,13 @@ namespace IBAD.Terminal.Model
             {
                 serverTCP.setFlDbase();
                 flDbase = true;
-                if (Length < 0.5 && Length > 0)
-                {
-                    data.runNumb++;
-                    serverTCP.setRunNumb(data.runNumb);
-                    Serialz();
-                }
+                //if (Length < data.deltaTape && Length > data.deltaTape / 2 && !_runPlus)
+                //{
+                //    data.runNumb++;
+                //    serverTCP.setRunNumb(data.runNumb);
+                //    Serialz();
+                //    _runPlus = true;
+                //}
 
             }
             if (!reelOn && serverTCP.getFlDbase() && data.autoRun)
@@ -278,12 +281,13 @@ namespace IBAD.Terminal.Model
         public void setFlBase()
         {
 
-            if (Length < 0.5 && Length > 0 && reelOn && !serverTCP.getFlDbase())
-            {
-                data.runNumb++;
-                serverTCP.setRunNumb(data.runNumb);
-                Serialz();
-            }
+            //if (Length < data.deltaTape && Length > data.deltaTape/2 && reelOn && !serverTCP.getFlDbase() && !_runPlus)
+            //{
+            //    _runPlus = true;
+            //    data.runNumb++;
+            //    serverTCP.setRunNumb(data.runNumb);
+            //    Serialz();
+            //}
             flDbase = true;
             serverTCP.setFlDbase();
         }
@@ -335,6 +339,12 @@ namespace IBAD.Terminal.Model
             Serialz();
             WriteSettingsToMbServer();
             WriteSettingsToBlock();
+        }
+        public void newProcess()
+        {
+            data.runNumb++;
+            serverTCP.setRunNumb(data.runNumb);
+            Serialz();
         }
 
     }

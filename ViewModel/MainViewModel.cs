@@ -262,6 +262,17 @@ namespace IBAD.Terminal.ViewModel
                 });
             }
         }
+        public ICommand InewProcess
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+
+                    model.newProcess();
+                });
+            }
+        }
         public ICommand WriteTape
         {
             get
